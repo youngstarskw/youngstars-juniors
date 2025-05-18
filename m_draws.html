@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Draws – Young Stars Junior Badminton Championship Season 2 2025</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <img src="assets/logo.jpg" alt="Young Stars" class="logo">
+  <h1>Main Draws</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="tournament_stages.html">Tournament Stages</a>
+    <a href="help.html">Help</a>
+  </nav>
+</header>
+
+<section class="hero" id="results-section">
+  <div id="category-view">
+    <h3>Select a category:</h3>
+    <ul>
+      <li><a href="#" onclick="showEvents('u9')">Under 9 Category</a></li>
+      <li><a href="#" onclick="showEvents('u11')">Under 11 Category</a></li>
+      <li><a href="#" onclick="showEvents('u13')">Under 13 Category</a></li>
+      <li><a href="#" onclick="showEvents('u15')">Under 15 Category</a></li>
+      <li><a href="#" onclick="showEvents('u17')">Under 17 Category</a></li>
+      <li><a href="#" onclick="showEvents('u19')">Under 19 Category</a></li>
+      <li><a href="#" onclick="showEvents('oxd')">Open XD Category</a></li>
+    </ul>
+  </div>
+
+  <div id="event-view" class="hidden">
+    <h3 id="event-title"></h3>
+    <ul id="event-list"></ul>
+    <button onclick="goBackToCategories()">← Back to Categories</button>
+  </div>
+
+  <div id="group-view" class="hidden">
+    <h3 id="group-title"></h3>
+    <ul id="group-list"></ul>
+    <button onclick="goBackToEvents()">← Back to Events</button>
+  </div>
+
+  <div id="table-view" class="hidden">
+    <h3 id="table-title"></h3>
+    <table class="results-table">
+      <thead>
+        <tr><th>Rank</th><th>Players</th><th>No. of Wins</th><th>No. of Losses</th><th>Total Points</th></tr>
+      </thead>
+      <tbody id="results-table-body"></tbody>
+    </table>
+    <button onclick="goBackToGroups()">← Back to Groups</button>
+  </div>
+</section>
+
+<footer>© Young Stars Kuwait | youngstarsjuniorchampionship.netlify.app</footer>
+
+<script>
+const eventMap = {
+  u9: [{ code: "singles", name: "Singles" }],
+  oxd: [{ code: "xd", name: "XD Doubles" }],
+  u11: ["bs", "gs", "bd", "gd"],
+  u13: ["bs", "gs", "bd", "gd"],
+  u15: ["bs", "gs", "bd", "gd"],
+  u17: ["bs", "gs", "bd", "gd"],
+  u19: ["bs", "gs", "bd", "gd"]
+};
+
+const eventLabels = {
+  bs: "Boys Singles", bd: "Boys Doubles",
+  gs: "Girls Singles", gd: "Girls Doubles"
+};
+
+let currentCategory = "", currentEvent = "";
+
+function showEvents(category) {
+  currentCategory = category;
+  document.getElementById("category-view").classList.add("hidden");
+  document.getElementById("event-view").classList.remove("hidden");
+
+  const list = document.getElementById("event-list");
+  document.getElementById("event-title").innerText = "Select an event:";
+  list.innerHTML = "";
+
+  const events = eventMap[category];
+  (events || []).forEach(e => {
+    const code = typeof e === 'string' ? e : e.code;
+    const name = typeof e === 'string' ? eventLabels[e] : e.name;
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "#";
+    link.innerText = name;
+    link.onclick = () => showGroups(code);
+    li.appendChild(link);
+    list.appendChild(li);
+  });
+}
+
+function showGroups(event) {
+  currentEvent = event;
+  document.getElementById("event-view").classList.add("hidden");
+  document.getElementById("group-view").classList.remove("hidden");
+
+  const groupList = document.getElementById("group-list");
+  document.getElementById("group-title").innerText = "Select a group:";
+  groupList.innerHTML = "";
+
+  ["a", "b", "c", "d"].forEach(group => {
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "#";
+    link.innerText = `Group ${group.toUpperCase()}`;
+    link.onclick = () => showResults(group);
+    li.appendChild(link);
+    groupList.appendChild(li);
+  });
+}
+
+function showResults(group) {
+  document.getElementById("group-view").classList.add("hidden");
+  document.getElementById("table-view").classList.remove("hidden");
+
+  document.getElementById("table-title").innerText = `Group ${group.toUpperCase()}`;
+  const tableBody = document.getElementById("results-table-body");
+
+  fetch(`assets/${currentCategory}/${currentEvent}/${group}.json`)
+    .then(response => response.json())
+    .then(data => {
+      tableBody.innerHTML = "";
+      if (!data.length) {
+        tableBody.innerHTML = "<tr><td colspan='5'>Results coming soon.</td></tr>";
+        return;
+      }
+      data.sort((a, b) => b.wins - a.wins || b.points - a.points);
+      data.forEach((team, index) => {
+        tableBody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${team.players}</td>
+            <td>${team.wins}</td>
+            <td>${team.losses}</td>
+            <td>${team.points}</td>
+          </tr>`;
+      });
+    })
+    .catch(() => {
+      tableBody.innerHTML = "<tr><td colspan='5'>Error loading results.</td></tr>";
+    });
+}
+
+function goBackToCategories() {
+  document.getElementById("event-view").classList.add("hidden");
+  document.getElementById("category-view").classList.remove("hidden");
+}
+function goBackToEvents() {
+  document.getElementById("group-view").classList.add("hidden");
+  document.getElementById("event-view").classList.remove("hidden");
+}
+function goBackToGroups() {
+  document.getElementById("table-view").classList.add("hidden");
+  document.getElementById("group-view").classList.remove("hidden");
+}
+</script>
+</body>
+</html>

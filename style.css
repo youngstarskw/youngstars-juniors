@@ -1,0 +1,276 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1e002d;
+  color: white;
+}
+
+header {
+  background-color: #2a0040;
+  text-align: center;
+  padding: 20px;
+}
+
+.logo {
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+nav a {
+  color: #ff80d5;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #d6b5ff;
+}
+
+.hero {
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #32004d;
+  border-top: 2px solid #ff80d5;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #2a0040;
+  font-size: 14px;
+}
+
+a {
+  color: #00BFFF;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #00BFFF;
+}
+
+.subcategory {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #00BFFF;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.toggle-btn:hover {
+  color: #ccc;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #222;
+  color: white;
+  border: 1px solid #555;
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+.results-table th {
+  background-color: #444;
+  color: #FFD700;
+}
+
+.results-table tr:hover {
+  background-color: #333;
+}
+
+section[id^="pro-"],
+section[id^="adv-"],
+section[id^="int-"],
+section[id^="lint-"],
+section[id^="vete45-"],
+section[id^="ld-"] {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
+}
+
+.nav-btn,
+#back-btn button {
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.nav-btn:hover,
+#back-btn button:hover {
+  background-color: #8645e8;
+}
+
+#category-view ul {
+  list-style-type: disc !important;
+  padding-left: 40px !important;
+}
+
+#category-view li {
+  display: list-item !important;
+}
+
+#category-view li::marker {
+  color: ##00BFFF;
+}
+
+#category-view a,
+.category-list a,
+#group-list a {
+  color: ##00BFFF !important;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+#category-view a:hover,
+.category-list a:hover,
+#group-list a:hover {
+  color: white !important;
+}
+
+/* Knockout bracket styles */
+.bracket {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  margin-top: 40px;
+  position: relative;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+}
+
+.round-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #FFD700;
+  font-size: 1.2rem;
+}
+
+.match {
+  border: 2px solid #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 180px;
+  background-color: #6a0dad;
+  color: white;
+  font-weight: bold;
+  position: relative;
+}
+
+/* connector lines */
+.round:not(:last-child) .match::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background-color: white;
+  transform: translateY(-50%);
+}
+
+
+.bracket-wrapper {
+  overflow-x: auto;
+  padding-bottom: 40px;
+}
+
+.bracket {
+  display: flex;
+  justify-content: flex-start;
+  gap: 80px;
+  padding: 20px;
+  min-width: 1000px;
+  position: relative;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 20px;
+  position: relative;
+}
+
+.round-title {
+  text-align: center;
+  font-weight: bold;
+  color: #00BFFF;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.match {
+  border: 2px solid #00BFFF;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background-color: #1e002d;
+  color: white;
+  min-width: 200px;
+  text-align: center;
+  position: relative;
+  font-weight: bold;
+}
+
+.match::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  width: 40px;
+  height: 2px;
+  background-color: #00BFFF;
+  transform: translateY(-50%);
+}
+
+.round:last-child .match::after {
+  display: none;
+}
+
+.champion .match {
+  border-color: gold;
+  background-color: #32004d;
+  font-size: 1.1rem;
+}
+
+.third {
+  margin-top: 30px;
+  border-color: gray;
+}

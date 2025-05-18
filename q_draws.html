@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qualifying Draw – Young Stars Junior Badminton Championship Season 2 2025</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <img src="assets/logo.jpg" alt="Young Stars" class="logo" />
+  <h1>Qualifying Draw</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="tournament_stages.html">Tournament Stages</a>
+    <a href="help.html">Help</a>
+  </nav>
+</header>
+
+<section id="draw-section" class="hero">
+  <div id="category-view">
+    <h3>Select a category:</h3>
+    <ul>
+      <li><a href="#" onclick="showEvents('u9')">Under 9 Category</a></li>
+      <li><a href="#" onclick="showEvents('u11')">Under 11 Category</a></li>
+      <li><a href="#" onclick="showEvents('u13')">Under 13 Category</a></li>
+      <li><a href="#" onclick="showEvents('u15')">Under 15 Category</a></li>
+      <li><a href="#" onclick="showEvents('u17')">Under 17 Category</a></li>
+      <li><a href="#" onclick="showEvents('u19')">Under 19 Category</a></li>
+      <li><a href="#" onclick="showEvents('oxd')">Open XD Category</a></li>
+    </ul>
+  </div>
+
+  <div id="event-view" class="hidden">
+    <h3 id="event-title"></h3>
+    <ul id="event-list"></ul>
+    <button onclick="goBackToCategories()">← Back to Categories</button>
+  </div>
+
+  <div id="draw-view" class="hidden">
+    <h3 id="draw-title"></h3>
+    <div class="bracket-wrapper">
+      <div class="bracket" id="draw-content"></div>
+    </div>
+    <button onclick="goBackToEvents()">← Back to Events</button>
+  </div>
+</section>
+
+<footer>© Young Stars Kuwait | youngstarsjuniorchampionship.netlify.app</footer>
+
+<script>
+const eventMap = {
+  u9: [{ code: "singles", name: "Singles" }],
+  oxd: [{ code: "xd", name: "XD Doubles" }],
+  u11: ["bs", "gs", "bd", "gd"],
+  u13: ["bs", "gs", "bd", "gd"],
+  u15: ["bs", "gs", "bd", "gd"],
+  u17: ["bs", "gs", "bd", "gd"],
+  u19: ["bs", "gs", "bd", "gd"]
+};
+
+const eventLabels = {
+  bs: "Boys Singles", bd: "Boys Doubles",
+  gs: "Girls Singles", gd: "Girls Doubles"
+};
+
+let currentCategory = "", currentEvent = "";
+
+function showEvents(category) {
+  currentCategory = category;
+  document.getElementById("category-view").classList.add("hidden");
+  document.getElementById("event-view").classList.remove("hidden");
+
+  const list = document.getElementById("event-list");
+  document.getElementById("event-title").innerText = "Select an event:";
+  list.innerHTML = "";
+
+  const events = eventMap[category];
+  (events || []).forEach(e => {
+    const code = typeof e === 'string' ? e : e.code;
+    const name = typeof e === 'string' ? eventLabels[e] : e.name;
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "#";
+    link.innerText = name;
+    link.onclick = () => showDraw(code);
+    li.appendChild(link);
+    list.appendChild(li);
+  });
+}
+
+function showDraw(event) {
+  currentEvent = event;
+  document.getElementById("event-view").classList.add("hidden");
+  document.getElementById("draw-view").classList.remove("hidden");
+  document.getElementById("draw-title").innerText = `${eventLabels[event] || "Draw"}`;
+
+  fetch(`assets/${currentCategory}/${currentEvent}/knockout.json`)
+    .then(response => response.json())
+    .then(data => renderBracket(data))
+    .catch(() => {
+      document.getElementById("draw-content").innerHTML = "<p>Knockout draw coming soon.</p>";
+    });
+}
+
+function renderBracket(data) {
+  const container = document.getElementById("draw-content");
+  if (!data || !data.qf || !data.sf || !data.f || !data.winner) {
+    container.innerHTML = "<p>Draw data missing or invalid.</p>";
+    return;
+  }
+
+  const third = data.third ? `<div class="match third">${data.third}</div>` : "";
+
+  container.innerHTML = `
+    <div class="round">
+      <div class="round-title">Quarterfinals</div>
+      ${data.qf.map(match => `<div class="match">${match}</div>`).join('')}
+    </div>
+    <div class="round">
+      <div class="round-title">Semifinals</div>
+      ${data.sf.map(match => `<div class="match">${match}</div>`).join('')}
+    </div>
+    <div class="round">
+      <div class="round-title">Final</div>
+      ${data.f.map(match => `<div class="match">${match}</div>`).join('')}
+    </div>
+    <div class="round champion">
+      <div class="round-title">Winner</div>
+      <div class="match">🏆 ${data.winner}</div>
+    </div>
+    ${third}
+  `;
+}
+
+function goBackToCategories() {
+  document.getElementById("event-view").classList.add("hidden");
+  document.getElementById("category-view").classList.remove("hidden");
+}
+function goBackToEvents() {
+  document.getElementById("draw-view").classList.add("hidden");
+  document.getElementById("event-view").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
